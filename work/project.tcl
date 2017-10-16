@@ -1,11 +1,11 @@
-set projDir "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/planAhead"
+set projDir "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/planAhead"
 set projName "8bitALU"
 set topName top
 set device xc6slx9-2tqg144
 if {[file exists "$projDir/$projName"]} { file delete -force "$projDir/$projName" }
 create_project $projName "$projDir/$projName" -part $device
 set_property design_mode RTL [get_filesets sources_1]
-set verilogSources [list "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/mojo_top_0.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/reset_conditioner_1.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/counter_2.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/state_3.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/counter_8.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/basicCPU/work/verilog/alu_9.v"]
+set verilogSources [list "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/mojo_top_0.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/reset_conditioner_1.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/counter_2.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/state_3.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/seven_seg_4.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/counter_8.v" "D:/Downloads/Term 4/50.002 - Com structs/mojo projects/8bitALU/work/verilog/alu_9.v"]
 import_files -fileset [get_filesets sources_1] -force -norecurse $verilogSources
 set ucfSources [list  "D:/Program\ Files/Mojo\ IDE/library/components/io_shield.ucf" "D:/Program\ Files/Mojo\ IDE/library/components/mojo.ucf"]
 import_files -fileset [get_filesets constrs_1] -force -norecurse $ucfSources

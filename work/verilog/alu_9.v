@@ -36,7 +36,7 @@ module alu_9 (
       6'h00: begin
         alu1 = a + b;
         n1 = alu1[7+0-:1];
-        if (alu1 == 8'h00) begin
+        if (alu1[0+7-:8] == 8'h00) begin
           z1 = 1'h1;
         end
         v1 = a[7+0-:1] & b[7+0-:1] & (~n1) | (~a[7+0-:1]) & (~b[7+0-:1]) & n1;
@@ -44,7 +44,7 @@ module alu_9 (
       6'h01: begin
         alu1 = a - b;
         n1 = alu1[7+0-:1];
-        if (alu1 == 8'h00) begin
+        if (alu1[0+7-:8] == 8'h00) begin
           z1 = 1'h1;
         end
         v1 = a[7+0-:1] & (~b[7+0-:1]) & (~n1) | (~a[7+0-:1]) & b[7+0-:1] & n1;

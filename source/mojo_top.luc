@@ -46,12 +46,12 @@ module mojo_top (
     spi_channel = bzzzz;      // not using flags
     avr_rx = bz;              // not using serial port
     
-    mystate.a = io_dip[0];
-    mystate.b = io_dip[1];
-    mystate.dipsw = io_dip[2][7];
-    mystate.alufn = io_dip[2][5:0];
+    mystate.a = io_dip[0];    //right most dip switch group
+    mystate.b = io_dip[1];    // center dip switch group
+    mystate.dipsw = io_dip[2][7]; // left most dip switch
+    mystate.alufn = io_dip[2][5:0]; // left most dip switch group
   
-    seven_seg3.char = b1101;
+    seven_seg3.char = b1101;      // off 1000
     seven_seg2.char = mystate.z; //displays 100's digit
     seven_seg1.char = mystate.v; //displays 10's digit
     seven_seg0.char = mystate.n; //displays 1's digit
@@ -74,8 +74,9 @@ module mojo_top (
         io_seg=~seven_seg0.segs;
         io_sel = ~4b1;                
     }
-    io_led = io_dip;          // connect the DIP switches to the LEDs
+    io_led = io_dip;      
     led=mystate.out;         // make LED on FPGA below display result
-    
+    io_led[0] = mystate.clk_a;  // connect the DIP switches to the LEDs
+    io_led[1] = mystate.clk_b;
   }
 }

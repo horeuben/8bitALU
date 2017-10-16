@@ -8,8 +8,8 @@ Executing edif2ngd -quiet "mojo_top_0.edf" "_ngo\mojo_top_0.ngo"
 Release 14.7 - edif2ngd P.20131013 (nt)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 Reading NGO file "D:/Downloads/Term 4/50.002 - Com structs/mojo
-projects/basicCPU/work/planAhead/8bitALU/8bitALU.runs/impl_1/_ngo/mojo_top_0.ngo
-" ...
+projects/8bitALU/work/planAhead/8bitALU/8bitALU.runs/impl_1/_ngo/mojo_top_0.ngo"
+...
 Gathering constraint information from source properties...
 Done.
 

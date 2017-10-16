@@ -14,7 +14,9 @@ module state_3 (
     output reg [7:0] out,
     output reg z,
     output reg v,
-    output reg n
+    output reg n,
+    output reg [7:0] clk_a,
+    output reg [7:0] clk_b
   );
   
   
@@ -57,6 +59,8 @@ module state_3 (
     M_myalu_alufn = alufn;
     M_myalu_a = 1'h0;
     M_myalu_b = 1'h0;
+    clk_a = 1'h0;
+    clk_b = 1'h0;
     
     case (M_state_q)
       MANUAL_state: begin
@@ -67,14 +71,18 @@ module state_3 (
         z = M_myalu_z;
         v = M_myalu_v;
         n = M_myalu_n;
+        clk_a = a;
+        clk_b = b;
         if (dipsw) begin
           M_state_d = AUTO_state;
         end
       end
       AUTO_state: begin
         M_myalu_alufn = alufn;
-        M_myalu_a = M_autoab_value[8+7-:8];
-        M_myalu_b = M_autoab_value[0+7-:8];
+        M_myalu_b = M_autoab_value[8+7-:8];
+        M_myalu_a = M_autoab_value[0+7-:8];
+        clk_b = M_autoab_value[8+7-:8];
+        clk_a = M_autoab_value[0+7-:8];
         out = M_myalu_alu;
         z = M_myalu_z;
         v = M_myalu_v;

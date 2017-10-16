@@ -8,13 +8,15 @@ module state (
     output out[8], //result of a <some operation> b
     output z,
     output v,
-    output n 
+    output n ,
+    output clk_a[8],
+    output clk_b[8]
   ) {
 
   .clk(clk) {
     .rst(rst) {
       fsm state = {MANUAL,AUTO};
-      counter autoab (#SIZE(16),#DIV(24)); //first 8 bits a(15:8), last 8 bits b (7:0)
+      counter autoab (#SIZE(16),#DIV(24)); //first 8 bits b(15:8), last 8 bits a (7:0)
       //counter auto_b (#SIZE(8), #DIV(16));
       
     }
@@ -30,6 +32,8 @@ module state (
     myalu.alufn = alufn;
     myalu.a = 0;
     myalu.b = 0;
+    clk_a = 0;
+    clk_b = 0;
     case (state.q){
       state.MANUAL:
         myalu.a = a;
@@ -39,14 +43,18 @@ module state (
         z = myalu.z;
         v = myalu.v;
         n = myalu.n;
+        clk_a = a;
+        clk_b = b;
         if(dipsw){
           state.d = state.AUTO;
         }
        
       state.AUTO:
         myalu.alufn = alufn;
-        myalu.a = autoab.value[15:8];
-        myalu.b = autoab.value[7:0];
+        myalu.b = autoab.value[15:8];
+        myalu.a = autoab.value[7:0];
+        clk_b = autoab.value[15:8];
+        clk_a = autoab.value[7:0];
         out = myalu.alu;
         z = myalu.z;
         v = myalu.v;

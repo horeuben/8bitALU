@@ -45,6 +45,8 @@ module mojo_top_0 (
   wire [1-1:0] M_mystate_z;
   wire [1-1:0] M_mystate_v;
   wire [1-1:0] M_mystate_n;
+  wire [8-1:0] M_mystate_clk_a;
+  wire [8-1:0] M_mystate_clk_b;
   reg [1-1:0] M_mystate_dipsw;
   reg [6-1:0] M_mystate_alufn;
   reg [8-1:0] M_mystate_a;
@@ -59,7 +61,9 @@ module mojo_top_0 (
     .out(M_mystate_out),
     .z(M_mystate_z),
     .v(M_mystate_v),
-    .n(M_mystate_n)
+    .n(M_mystate_n),
+    .clk_a(M_mystate_clk_a),
+    .clk_b(M_mystate_clk_b)
   );
   
   wire [7-1:0] M_seven_seg0_segs;
@@ -129,6 +133,8 @@ module mojo_top_0 (
     endcase
     io_led = io_dip;
     led = M_mystate_out;
+    io_led[0+7-:8] = M_mystate_clk_a;
+    io_led[8+7-:8] = M_mystate_clk_b;
   end
   
   always @(posedge clk) begin
