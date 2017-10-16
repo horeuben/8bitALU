@@ -17,7 +17,6 @@ module state (
     .rst(rst) {
       fsm state = {MANUAL,AUTO};
       counter autoab (#SIZE(16),#DIV(24)); //first 8 bits b(15:8), last 8 bits a (7:0)
-      //counter auto_b (#SIZE(8), #DIV(16));
       
     }
     

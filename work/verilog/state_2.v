@@ -4,7 +4,7 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module state_3 (
+module state_2 (
     input clk,
     input rst,
     input dipsw,
@@ -26,7 +26,7 @@ module state_3 (
   
   reg M_state_d, M_state_q = MANUAL_state;
   wire [16-1:0] M_autoab_value;
-  counter_8 autoab (
+  counter_4 autoab (
     .clk(clk),
     .rst(rst),
     .value(M_autoab_value)
@@ -39,7 +39,7 @@ module state_3 (
   reg [8-1:0] M_myalu_a;
   reg [8-1:0] M_myalu_b;
   reg [6-1:0] M_myalu_alufn;
-  alu_9 myalu (
+  alu_5 myalu (
     .a(M_myalu_a),
     .b(M_myalu_b),
     .alufn(M_myalu_alufn),

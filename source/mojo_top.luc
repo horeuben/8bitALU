@@ -23,21 +23,13 @@ module mojo_top (
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
-  //  edge_detector edge_detector (#RISE(1), #FALL(0));
     
     .rst(rst) {
-      dff led_reg[8]; // storage for LED value
-    
-      counter ctr (#SIZE(3), #DIV(16));//counter to light up led segments 
       state mystate;
-      
+      multi_seven_seg seg;
     }
   }
-    seven_seg seven_seg0;
-    seven_seg seven_seg1;
-    seven_seg seven_seg2;
-    seven_seg seven_seg3;
-  
+
   always {
     reset_cond.in = ~rst_n;   // input raw inverted reset signal
     rst = reset_cond.out;     // conditioned reset
@@ -51,32 +43,19 @@ module mojo_top (
     mystate.dipsw = io_dip[2][7]; // left most dip switch
     mystate.alufn = io_dip[2][5:0]; // left most dip switch group
   
-    seven_seg3.char = b1101;      // off 1000
-    seven_seg2.char = mystate.z; //displays 100's digit
-    seven_seg1.char = mystate.v; //displays 10's digit
-    seven_seg0.char = mystate.n; //displays 1's digit
-
-    //control the displaying of zvn 
-     case(ctr.value){
-      0:
-        io_seg =~seven_seg0.segs; 
-        io_sel = ~4b1;
-      1: 
-        io_seg=~seven_seg1.segs;
-        io_sel = ~4b10;
-      2:
-        io_seg =~seven_seg2.segs;          
-        io_sel = ~4b100;
-      3: 
-        io_seg=~seven_seg3.segs;
-        io_sel = ~4b1000;
-      default:
-        io_seg=~seven_seg0.segs;
-        io_sel = ~4b1;                
-    }
     io_led = io_dip;      
     led=mystate.out;         // make LED on FPGA below display result
     io_led[0] = mystate.clk_a;  // connect the DIP switches to the LEDs
     io_led[1] = mystate.clk_b;
+    
+    seg.values[3] =0;
+    seg.values[2] = mystate.z; // set z as 3rd from right led
+    seg.values[1] = mystate.v; // set v as 2nd from right led
+    seg.values[0] = mystate.n; // set n as first led
+    
+    io_seg = ~seg.seg;      // connect segments to counter
+    io_sel = ~seg.sel;      // select all digits to display on 7seg led
+    io_sel[3] = ~4h0;       // off last led
+
   }
 }

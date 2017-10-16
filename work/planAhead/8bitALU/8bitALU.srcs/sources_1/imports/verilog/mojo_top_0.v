@@ -34,13 +34,6 @@ module mojo_top_0 (
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
-  reg [7:0] M_led_reg_d, M_led_reg_q = 1'h0;
-  wire [3-1:0] M_ctr_value;
-  counter_2 ctr (
-    .clk(clk),
-    .rst(rst),
-    .value(M_ctr_value)
-  );
   wire [8-1:0] M_mystate_out;
   wire [1-1:0] M_mystate_z;
   wire [1-1:0] M_mystate_v;
@@ -51,7 +44,7 @@ module mojo_top_0 (
   reg [6-1:0] M_mystate_alufn;
   reg [8-1:0] M_mystate_a;
   reg [8-1:0] M_mystate_b;
-  state_3 mystate (
+  state_2 mystate (
     .clk(clk),
     .rst(rst),
     .dipsw(M_mystate_dipsw),
@@ -65,33 +58,15 @@ module mojo_top_0 (
     .clk_a(M_mystate_clk_a),
     .clk_b(M_mystate_clk_b)
   );
-  
-  wire [7-1:0] M_seven_seg0_segs;
-  reg [4-1:0] M_seven_seg0_char;
-  seven_seg_4 seven_seg0 (
-    .char(M_seven_seg0_char),
-    .segs(M_seven_seg0_segs)
-  );
-  
-  wire [7-1:0] M_seven_seg1_segs;
-  reg [4-1:0] M_seven_seg1_char;
-  seven_seg_4 seven_seg1 (
-    .char(M_seven_seg1_char),
-    .segs(M_seven_seg1_segs)
-  );
-  
-  wire [7-1:0] M_seven_seg2_segs;
-  reg [4-1:0] M_seven_seg2_char;
-  seven_seg_4 seven_seg2 (
-    .char(M_seven_seg2_char),
-    .segs(M_seven_seg2_segs)
-  );
-  
-  wire [7-1:0] M_seven_seg3_segs;
-  reg [4-1:0] M_seven_seg3_char;
-  seven_seg_4 seven_seg3 (
-    .char(M_seven_seg3_char),
-    .segs(M_seven_seg3_segs)
+  wire [7-1:0] M_seg_seg;
+  wire [4-1:0] M_seg_sel;
+  reg [16-1:0] M_seg_values;
+  multi_seven_seg_3 seg (
+    .clk(clk),
+    .rst(rst),
+    .values(M_seg_values),
+    .seg(M_seg_seg),
+    .sel(M_seg_sel)
   );
   
   always @* begin
@@ -104,45 +79,16 @@ module mojo_top_0 (
     M_mystate_b = io_dip[8+7-:8];
     M_mystate_dipsw = io_dip[16+7+0-:1];
     M_mystate_alufn = io_dip[16+0+5-:6];
-    M_seven_seg3_char = 4'hd;
-    M_seven_seg2_char = M_mystate_z;
-    M_seven_seg1_char = M_mystate_v;
-    M_seven_seg0_char = M_mystate_n;
-    
-    case (M_ctr_value)
-      1'h0: begin
-        io_seg = ~M_seven_seg0_segs;
-        io_sel = 4'he;
-      end
-      1'h1: begin
-        io_seg = ~M_seven_seg1_segs;
-        io_sel = 4'hd;
-      end
-      2'h2: begin
-        io_seg = ~M_seven_seg2_segs;
-        io_sel = 4'hb;
-      end
-      2'h3: begin
-        io_seg = ~M_seven_seg3_segs;
-        io_sel = 4'h7;
-      end
-      default: begin
-        io_seg = ~M_seven_seg0_segs;
-        io_sel = 4'he;
-      end
-    endcase
     io_led = io_dip;
     led = M_mystate_out;
     io_led[0+7-:8] = M_mystate_clk_a;
     io_led[8+7-:8] = M_mystate_clk_b;
+    M_seg_values[12+3-:4] = 1'h0;
+    M_seg_values[8+3-:4] = M_mystate_z;
+    M_seg_values[4+3-:4] = M_mystate_v;
+    M_seg_values[0+3-:4] = M_mystate_n;
+    io_seg = ~M_seg_seg;
+    io_sel = ~M_seg_sel;
+    io_sel[3+0-:1] = 4'hf;
   end
-  
-  always @(posedge clk) begin
-    if (rst == 1'b1) begin
-      M_led_reg_q <= 1'h0;
-    end else begin
-      M_led_reg_q <= M_led_reg_d;
-    end
-  end
-  
 endmodule
