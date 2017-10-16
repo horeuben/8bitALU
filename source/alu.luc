@@ -1,0 +1,92 @@
+global Inst {
+  const ADD   = 6b000000;  // dest, op1, op2     : R[dest] = R[op1] + R[op2]
+  const SUB   = 6b000001;  // dest, op1, op2     : R[dest] = R[op1] - R[op2]
+  const MUL   = 6b000010; 
+  const SHL   = 6b100000; // dest, op1, op2     : R[dest] = R[op1] << R[op2]
+  const SHR   = 6b100001; // dest, op1, op2     : R[dest] = R[op1] >> R[op2]
+  const SRA   = 6b100011;
+  const AND   = 6b011000; // dest, op1, op2     : R[dest] = R[op1] & R[op2]
+  const OR    = 6b011110; // dest, op1, op2     : R[dest] = R[op1] | R[op2]
+  const LDR   = 6b011010; // dest, op1          : R[dest] = ~R[op1]
+  const XOR   = 6b010110; // dest, op1, op2     : R[dest] = R[op1] ^ R[op2]
+  const CMPEQ = 6b110011;
+  const CMPLT = 6b110101;
+  const CMPLE = 6b110111;
+}
+ 
+module alu (
+    input a[8],
+    input b[8],
+    input alufn[6],
+    output z,
+    output v,
+    output n,
+    output alu[8]
+    
+  ) {
+ 
+
+//  sig alufn[6];        // opcode
+//  sig a[8];      // a
+//  sig b[8];      // b
+  sig alu1[16];      // result
+  sig n1[1];
+  sig v1[1];
+  sig z1[1];
+  
+  always {
+    // defaults
+//    alufn = 6b000010;
+//    a=8b11111111;
+//    b=8b10101010; 
+    n1=0;
+    v1=0;
+    z1=0;
+    // Perform the operation
+    case (alufn) {
+      Inst.MUL:
+        alu1 = a*b;
+      Inst.ADD:
+        alu1 = a+b;  // addition
+        n1 = alu1[7];
+        if (alu1[7:0]==8b00000000) {z1=1;}
+        v1 = a[7]&b[7]&(~n1) | (~a[7])&(~b[7])&n1;
+      Inst.SUB:
+        alu1 = a-b;   // subtraction
+        n1 = alu1[7];
+        if (alu1[7:0]==8b00000000) {z1=1;}
+        v1 = a[7]&(~b[7])&(~n1) | (~a[7])&b[7]&n1;
+      Inst.SHL:
+        alu1 = a << b[2:0];  // shift left 
+      Inst.SHR:
+        alu1 = a >> b[2:0];  // shift right
+      Inst.SRA:
+        alu1 = $signed(a) >>> b[2:0];  // shift right with sign extension
+      Inst.AND:
+        alu1 = a & b;   // bit-wise AND
+      Inst.OR:
+        alu1 = a | b;   // bit-wise OR
+      Inst.XOR:
+        alu1 = a ^ b ;   // bit-wise XOR
+      Inst.CMPLT:
+        if ($signed(a)<$signed(b)) {
+          alu1 = 8b00000001;}
+        else {
+          alu1 = 8b00000000;}
+      Inst.CMPLE:
+        if ($signed(a)<=$signed(b)) {
+          alu1 = 8b00000001;}
+        else {
+          alu1 = 8b00000000;}
+      Inst.CMPEQ:
+        if ($signed(a)==$signed(b)) {
+          alu1 = 8b00000001;}
+        else {
+          alu1 = 8b00000000;}
+    }
+    v=v1;
+    n=n1;
+    z=z1;
+    alu=alu1[7:0];
+  }
+}

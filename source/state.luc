@@ -1,0 +1,59 @@
+module state (
+    input clk,  // clock
+    input rst,  // reset
+    input dipsw,
+    input alufn[6], //only using 0:5 //get from  io_dip[2]
+    input a[8],
+    input b[8],
+    output out[8], //result of a <some operation> b
+    output z,
+    output v,
+    output n 
+  ) {
+
+  .clk(clk) {
+    .rst(rst) {
+      fsm state = {MANUAL,AUTO};
+      counter autoab (#SIZE(16),#DIV(24)); //first 8 bits a(15:8), last 8 bits b (7:0)
+      //counter auto_b (#SIZE(8), #DIV(16));
+      
+    }
+    
+  }
+  alu myalu;
+  
+  always {
+    out = 0;
+    z = 0;
+    v = 0;
+    n = 0;
+    myalu.alufn = alufn;
+    myalu.a = 0;
+    myalu.b = 0;
+    case (state.q){
+      state.MANUAL:
+        myalu.a = a;
+        myalu.b = b;
+        myalu.alufn = alufn;
+        out = myalu.alu;
+        z = myalu.z;
+        v = myalu.v;
+        n = myalu.n;
+        if(dipsw){
+          state.d = state.AUTO;
+        }
+       
+      state.AUTO:
+        myalu.alufn = alufn;
+        myalu.a = autoab.value[15:8];
+        myalu.b = autoab.value[7:0];
+        out = myalu.alu;
+        z = myalu.z;
+        v = myalu.v;
+        n = myalu.n;
+        if (!dipsw){
+          state.d = state.MANUAL;
+        }
+    }
+  }
+}
