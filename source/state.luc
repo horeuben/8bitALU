@@ -3,7 +3,7 @@ module state (
     input rst,  // reset
     input dipsw,
     input alufn[6], //only using 0:5 //get from  io_dip[2]
-    input diperr,
+    input diperr, //diperr is the switch that will force output to be all high
     input a[8],
     input b[8],
     output out[8], //result of a <some operation> b
@@ -11,18 +11,23 @@ module state (
     output v[3],
     output n[3] ,
     output clk_a[8],
-    output clk_b[8]
+    output clk_b[8],
+    output alufnout[6]
   ) {
 
   .clk(clk) {
     .rst(rst) {
-      fsm state = {MANUAL,AUTO};
-      counter autoab (#SIZE(16),#DIV(24)); //first 8 bits b(15:8), last 8 bits a (7:0)
-      
+    //states in our FSM (Switch between manual mode and auto mode)
+      fsm state = {MANUAL,AUTO,PAUSE};
+      //we will use the 
+      tester mytester;
     }
     
   }
   alu myalu;
+  sig displaya[8];
+  sig displayb[8];
+  sig alufnvar[6];
   
   always {
     out = 0;
@@ -34,6 +39,11 @@ module state (
     myalu.b = 0;
     clk_a = 0;
     clk_b = 0;
+    displaya =0;
+    displayb = 0;
+    alufnout = alufn;
+    alufnvar = 0;
+    mytester.forcederr=diperr;
     case (state.q){
       state.MANUAL:
         myalu.a = a;
@@ -45,32 +55,58 @@ module state (
         n = myalu.n;
         clk_a = a;
         clk_b = b;
-
+        alufnout = alufn;
+        if (diperr & myalu.alu!=8b11111111 ){
+            out = 8b11111111;
+            z = 2;
+            v = 3;
+            n = 3; //To display Err on 7 seg led
+      }
         if(dipsw){
           state.d = state.AUTO;
         }
        
       state.AUTO:
-        myalu.alufn = alufn;
-        myalu.b = autoab.value[15:8];
-        myalu.a = autoab.value[7:0];
-        clk_b = autoab.value[15:8];
-        clk_a = autoab.value[7:0];
-        out = myalu.alu;
-        z = myalu.z;
-        v = myalu.v;
-        n = myalu.n;
-
-        if (!dipsw){
-          state.d = state.MANUAL;
-        }
-    }
-          if (diperr & myalu.alu!=8b11111111){
+        mytester.forcederr = diperr;
+        out = mytester.out;
+        z =mytester.z;
+        v = mytester.v;
+        n = mytester.n;
+        clk_a = mytester.a;
+        clk_b = mytester.b;   
+        displaya = mytester.a;
+        displayb = mytester.b;   
+        alufnout = mytester.alufn;  
+        //change to compare in tester module only 
+        if (diperr & mytester.err==1){
+         // alufnvar = mytester.alufn;
+                  
             out = 8b11111111;
             z = 2;
             v = 3;
             n = 3; //To display Err on 7 seg led
-      } 
+           // state.d = state.PAUSE;
+      }
+        if (!dipsw){
+          state.d = state.MANUAL;
+        }
+        
+    //  state.PAUSE:
+    //    alufnout = alufnvar;
+    //    clk_a = displaya;
+    //    clk_b = displayb;
+    //    out = 8b11111111;
+   //     z = 2;
+    //    v = 3;
+    //    n = 3;
+   //     if (!diperr & !dipsw){
+    //      state.d = state.MANUAL;
+   //     }
+   //     if (!diperr & dipsw) {
+   //       state.d = state.AUTO;
+   //     }
+    }
+         
 
   }
 }

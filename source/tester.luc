@@ -1,0 +1,138 @@
+global TestInst {
+  const ADD1   = 3b001; //opcode for addition     a+b
+  const ADD2   = 3b010;
+  const ADD3   = 3b011;
+  const ADD4   = 3b100;
+  const SUB1   = 3b101;
+}
+module tester (
+    input clk,  // clock
+    input rst,  // reset
+    input forcederr, //check if error is forced
+    output a[8],
+    output b[8],
+    output alufn[6],
+    output out[8],
+    output z,
+    output v,
+    output n,
+    output err
+){
+ 
+  .clk(clk) {
+    .rst(rst) {
+      counter ctr (#DIV(26), #SIZE(3),#TOP(3b101)); 
+    }
+  }
+  
+  alu myalu;
+  sig intermediate[8];
+  
+    always {
+    out = 0;
+    z = 0;
+    v = 0;
+    n = 0;
+    a=0;
+    b=0;
+    alufn=0;
+    myalu.alufn = 0;
+    myalu.a = 0;
+    myalu.b = 0;
+    err=0; //error is assumed to be 0 unless changed later
+    intermediate=8b11111111; //'wrong' or 'correct' output displayed on mojo
+          
+    //when you reach the last state, go back to the first state
+      case(ctr.value){
+    //test cases 
+      
+        TestInst.ADD1:
+      
+          myalu.a=8b00011011;
+          myalu.b=8b00100101;
+          a=8b00011011;
+          b=8b00100101;
+          alufn = Inst.ADD;
+          myalu.alufn = Inst.ADD;   
+        // if there is no forcederror make intermediate the result of alu 
+          if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        //compare with our manually calculated output with the intermediate result 
+         if (intermediate != 8b01000000){
+            err =1;
+            }
+        
+        
+        
+        TestInst.ADD2:
+          myalu.a=8b01000001;
+          myalu.b=8b01000010;
+          a=8b01000001;
+          b=8b01000010;
+          myalu.alufn = Inst.ADD;
+          alufn = Inst.ADD;
+          if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+          if (intermediate != 8b10000011){
+            err =1;
+            }
+         
+        
+
+        
+        TestInst.ADD3:
+          myalu.a=8b10000000;
+          myalu.b=8b10000000;
+          a=8b10000000;
+          b=8b10000000;
+          myalu.alufn = Inst.ADD;
+          alufn=Inst.ADD;
+          if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+          if (intermediate != 8b00000000){
+            err =1;
+            }
+          
+        
+      TestInst.ADD4:
+        myalu.a= 8b11111111;
+        myalu.b=8b00000101;
+        a= 8b11111111;
+        b=8b00000101;
+      myalu.alufn = Inst.ADD;
+        alufn=Inst.ADD;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+          if (intermediate != 8b00000100){
+            err =1;
+            }
+        
+        TestInst.SUB1:
+        myalu.a= 8b00000011;
+        myalu.b=8b00000100;
+        a= 8b00000011;
+        b=8b00000100;
+      myalu.alufn = Inst.SUB;
+        alufn = Inst.SUB;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+          if (intermediate != 8b11111111){
+            err =1;
+            }
+    }
+    z= myalu.z;
+    v=myalu.v;
+    n=myalu.n;
+    out = intermediate;
+    
+    
+    
+}
+}
+
+  
