@@ -67,6 +67,9 @@ module alu_5 (
       6'h16: begin
         alu1 = a ^ b;
       end
+      6'h1a: begin
+        alu1 = a;
+      end
       6'h35: begin
         if ($signed(a) < $signed(b)) begin
           alu1 = 8'h01;

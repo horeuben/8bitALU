@@ -42,6 +42,7 @@ module mojo_top (
     mystate.b = io_dip[1];    // center dip switch group
     mystate.dipsw = io_dip[2][7]; // left most dip switch
     mystate.alufn = io_dip[2][5:0]; // left most dip switch group
+    mystate.diperr = io_dip[2][6]; // 2nd left most dip switch in left most dip switch group
   
     io_led = io_dip;      
     led=mystate.out;         // make LED on FPGA below display result

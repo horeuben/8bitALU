@@ -9,12 +9,13 @@ module state_2 (
     input rst,
     input dipsw,
     input [5:0] alufn,
+    input diperr,
     input [7:0] a,
     input [7:0] b,
     output reg [7:0] out,
-    output reg z,
-    output reg v,
-    output reg n,
+    output reg [2:0] z,
+    output reg [2:0] v,
+    output reg [2:0] n,
     output reg [7:0] clk_a,
     output reg [7:0] clk_b
   );
@@ -92,6 +93,12 @@ module state_2 (
         end
       end
     endcase
+    if (diperr & M_myalu_alu != 8'hff) begin
+      out = 8'hff;
+      z = 2'h2;
+      v = 2'h3;
+      n = 2'h3;
+    end
   end
   
   always @(posedge clk) begin

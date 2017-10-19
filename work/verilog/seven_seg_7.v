@@ -21,28 +21,10 @@ module seven_seg_7 (
         segs = 7'h06;
       end
       2'h2: begin
-        segs = 7'h5b;
+        segs = 7'h79;
       end
       2'h3: begin
-        segs = 7'h4f;
-      end
-      3'h4: begin
-        segs = 7'h66;
-      end
-      3'h5: begin
-        segs = 7'h6d;
-      end
-      3'h6: begin
-        segs = 7'h7d;
-      end
-      3'h7: begin
-        segs = 7'h07;
-      end
-      4'h8: begin
-        segs = 7'h7f;
-      end
-      4'h9: begin
-        segs = 7'h67;
+        segs = 7'h50;
       end
       default: begin
         segs = 7'h00;

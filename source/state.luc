@@ -3,12 +3,13 @@ module state (
     input rst,  // reset
     input dipsw,
     input alufn[6], //only using 0:5 //get from  io_dip[2]
+    input diperr,
     input a[8],
     input b[8],
     output out[8], //result of a <some operation> b
-    output z,
-    output v,
-    output n ,
+    output z[3],
+    output v[3],
+    output n[3] ,
     output clk_a[8],
     output clk_b[8]
   ) {
@@ -44,6 +45,7 @@ module state (
         n = myalu.n;
         clk_a = a;
         clk_b = b;
+
         if(dipsw){
           state.d = state.AUTO;
         }
@@ -58,9 +60,17 @@ module state (
         z = myalu.z;
         v = myalu.v;
         n = myalu.n;
+
         if (!dipsw){
           state.d = state.MANUAL;
         }
     }
+          if (diperr & myalu.alu!=8b11111111){
+            out = 8b11111111;
+            z = 2;
+            v = 3;
+            n = 3; //To display Err on 7 seg led
+      } 
+
   }
 }

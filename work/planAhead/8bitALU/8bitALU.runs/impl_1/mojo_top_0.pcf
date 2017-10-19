@@ -1,5 +1,5 @@
 //! **************************************************************************
-// Written by: Map P.20131013 on Mon Oct 16 19:05:27 2017
+// Written by: Map P.20131013 on Thu Oct 19 12:23:17 2017
 //! **************************************************************************
 
 SCHEMATIC START;
@@ -80,12 +80,12 @@ COMP "io_led[17]" LOCATE = SITE "P16" LEVEL 1;
 COMP "io_led[18]" LOCATE = SITE "P17" LEVEL 1;
 COMP "io_led[19]" LOCATE = SITE "P21" LEVEL 1;
 COMP "spi_mosi" LOCATE = SITE "P44" LEVEL 1;
-TIMEGRP clk = BEL "seg/ctr/M_ctr_q_2" BEL "seg/ctr/M_ctr_q_0" BEL
-        "seg/ctr/M_ctr_q_1" BEL "seg/ctr/M_ctr_q_5" BEL "seg/ctr/M_ctr_q_3"
-        BEL "seg/ctr/M_ctr_q_4" BEL "seg/ctr/M_ctr_q_6" BEL
-        "seg/ctr/M_ctr_q_7" BEL "seg/ctr/M_ctr_q_10" BEL "seg/ctr/M_ctr_q_8"
-        BEL "seg/ctr/M_ctr_q_9" BEL "seg/ctr/M_ctr_q_11" BEL
-        "seg/ctr/M_ctr_q_12" BEL "seg/ctr/M_ctr_q_15" BEL "seg/ctr/M_ctr_q_13"
+TIMEGRP clk = BEL "seg/ctr/M_ctr_q_1" BEL "seg/ctr/M_ctr_q_0" BEL
+        "seg/ctr/M_ctr_q_4" BEL "seg/ctr/M_ctr_q_2" BEL "seg/ctr/M_ctr_q_3"
+        BEL "seg/ctr/M_ctr_q_5" BEL "seg/ctr/M_ctr_q_6" BEL
+        "seg/ctr/M_ctr_q_9" BEL "seg/ctr/M_ctr_q_7" BEL "seg/ctr/M_ctr_q_8"
+        BEL "seg/ctr/M_ctr_q_12" BEL "seg/ctr/M_ctr_q_10" BEL
+        "seg/ctr/M_ctr_q_11" BEL "seg/ctr/M_ctr_q_15" BEL "seg/ctr/M_ctr_q_13"
         BEL "seg/ctr/M_ctr_q_14" BEL "seg/ctr/M_ctr_q_17" BEL
         "seg/ctr/M_ctr_q_16" BEL "clk_BUFGP/BUFG" BEL "reset_cond/M_stage_q_3"
         BEL "reset_cond/M_stage_q_2" BEL "reset_cond/M_stage_q_1" BEL

@@ -35,13 +35,14 @@ module mojo_top_0 (
     .out(M_reset_cond_out)
   );
   wire [8-1:0] M_mystate_out;
-  wire [1-1:0] M_mystate_z;
-  wire [1-1:0] M_mystate_v;
-  wire [1-1:0] M_mystate_n;
+  wire [3-1:0] M_mystate_z;
+  wire [3-1:0] M_mystate_v;
+  wire [3-1:0] M_mystate_n;
   wire [8-1:0] M_mystate_clk_a;
   wire [8-1:0] M_mystate_clk_b;
   reg [1-1:0] M_mystate_dipsw;
   reg [6-1:0] M_mystate_alufn;
+  reg [1-1:0] M_mystate_diperr;
   reg [8-1:0] M_mystate_a;
   reg [8-1:0] M_mystate_b;
   state_2 mystate (
@@ -49,6 +50,7 @@ module mojo_top_0 (
     .rst(rst),
     .dipsw(M_mystate_dipsw),
     .alufn(M_mystate_alufn),
+    .diperr(M_mystate_diperr),
     .a(M_mystate_a),
     .b(M_mystate_b),
     .out(M_mystate_out),
@@ -79,6 +81,7 @@ module mojo_top_0 (
     M_mystate_b = io_dip[8+7-:8];
     M_mystate_dipsw = io_dip[16+7+0-:1];
     M_mystate_alufn = io_dip[16+0+5-:6];
+    M_mystate_diperr = io_dip[16+6+0-:1];
     io_led = io_dip;
     led = M_mystate_out;
     io_led[0+7-:8] = M_mystate_clk_a;
