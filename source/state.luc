@@ -62,6 +62,12 @@ module state (
             v = 3;
             n = 3; //To display Err on 7 seg led
       }
+        if(alufn!=Inst.SHR & alufn!=Inst.CMPLE & alufn !=Inst.CMPLT & alufn !=Inst.SUB& alufn !=Inst.XOR& alufn !=Inst.AND& alufn !=Inst.SRA& alufn !=Inst.CMPEQ& alufn !=Inst.SHL& alufn !=Inst.MUL& alufn !=Inst.OR& alufn !=Inst.LDR& alufn !=Inst.ADD){
+           out = 8b0;
+           z = 2;
+            v = 3;
+            n = 3; //To display Err on 7 seg led if alufn input invalid
+          }
         if(dipsw){
           state.d = state.AUTO;
         }
@@ -90,20 +96,6 @@ module state (
           state.d = state.MANUAL;
         }
         
-    //  state.PAUSE:
-    //    alufnout = alufnvar;
-    //    clk_a = displaya;
-    //    clk_b = displayb;
-    //    out = 8b11111111;
-   //     z = 2;
-    //    v = 3;
-    //    n = 3;
-   //     if (!diperr & !dipsw){
-    //      state.d = state.MANUAL;
-   //     }
-   //     if (!diperr & dipsw) {
-   //       state.d = state.AUTO;
-   //     }
     }
          
 

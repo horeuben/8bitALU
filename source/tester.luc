@@ -1,9 +1,9 @@
 global TestInst {
-  const ADD1   = 5b000; //state for addition     a+b
-  const ADD2   = 5b001;
-  const ADD3   = 5b010;
-  const ADD4   = 5b011;
-  const SUB1   = 5b100;
+  const ADD1   = 5b000; //state for addition, normal adding of 2 +ve numbers
+  const ADD2   = 5b001; // adding 2 positive numbers with overflow
+  const ADD3   = 5b010; // adding 2 negative numbers with overflow
+  const ADD4   = 5b011; //adding 1 positive and 1 -ve number no overflow
+  const SUB1   = 5b100; 
   const SUB2   = 5b101;
   const SUB3   = 5b110;
   const SUB4   = 5b111;
@@ -48,7 +48,7 @@ module tester (
   }
   
   alu myalu;
-  sig intermediate[8];
+  sig intermediate[8]; //temporarily store value of output
   
     always {
     out = 0;
@@ -62,7 +62,7 @@ module tester (
     myalu.a = 0;
     myalu.b = 0;
     err=0; //error is assumed to be 0 unless changed later
-    intermediate=8b11111111;
+    intermediate=8b11111111; //intermediate
               
     //when you reach the last state, go back to the first state
       case(ctr.value){

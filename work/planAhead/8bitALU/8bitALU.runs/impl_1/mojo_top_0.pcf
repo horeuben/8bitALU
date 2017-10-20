@@ -1,5 +1,5 @@
 //! **************************************************************************
-// Written by: Map P.20131013 on Fri Oct 20 11:36:32 2017
+// Written by: Map P.20131013 on Fri Oct 20 12:00:49 2017
 //! **************************************************************************
 
 SCHEMATIC START;
@@ -95,6 +95,7 @@ TIMEGRP clk = BEL "mystate/M_state_q_FSM_FFd2" BEL
         "mystate/mytester/ctr/M_ctr_q_19" BEL
         "mystate/mytester/ctr/M_ctr_q_26" BEL
         "mystate/mytester/ctr/M_ctr_q_26_1" BEL
+        "mystate/mytester/ctr/M_ctr_q_28_1" BEL
         "mystate/mytester/ctr/M_ctr_q_29_1" BEL
         "mystate/mytester/ctr/M_ctr_q_30_1" BEL "clk_BUFGP/BUFG" BEL
         "reset_cond/M_stage_q_3" BEL "reset_cond/M_stage_q_2" BEL

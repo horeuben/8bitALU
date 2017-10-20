@@ -101,7 +101,7 @@ Synthesizing Unit <state_2>.
     | Implementation     | LUT                                            |
     -----------------------------------------------------------------------
     Summary:
-	inferred  11 Multiplexer(s).
+	inferred  15 Multiplexer(s).
 	inferred   1 Finite State Machine(s).
 Unit <state_2> synthesized.
 
@@ -212,12 +212,12 @@ Macro Statistics
  8-bit comparator equal                                : 2
  8-bit comparator greater                              : 2
  8-bit comparator lessequal                            : 2
-# Multiplexers                                         : 17
+# Multiplexers                                         : 21
  1-bit 27-to-1 multiplexer                             : 1
- 3-bit 2-to-1 multiplexer                              : 6
+ 3-bit 2-to-1 multiplexer                              : 9
  6-bit 2-to-1 multiplexer                              : 1
  7-bit 2-to-1 multiplexer                              : 1
- 8-bit 2-to-1 multiplexer                              : 8
+ 8-bit 2-to-1 multiplexer                              : 9
 # Logic shifters                                       : 7
  16-bit shifter arithmetic right                       : 2
  16-bit shifter logical left                           : 2
@@ -279,12 +279,12 @@ Macro Statistics
  8-bit comparator equal                                : 2
  8-bit comparator greater                              : 2
  8-bit comparator lessequal                            : 2
-# Multiplexers                                         : 17
+# Multiplexers                                         : 21
  1-bit 27-to-1 multiplexer                             : 1
- 3-bit 2-to-1 multiplexer                              : 6
+ 3-bit 2-to-1 multiplexer                              : 9
  6-bit 2-to-1 multiplexer                              : 1
  7-bit 2-to-1 multiplexer                              : 1
- 8-bit 2-to-1 multiplexer                              : 8
+ 8-bit 2-to-1 multiplexer                              : 9
 # Logic shifters                                       : 7
  16-bit shifter arithmetic right                       : 2
  16-bit shifter logical left                           : 2
@@ -338,6 +338,7 @@ Mapping all equations...
 Building and optimizing final netlist ...
 Found area constraint ratio of 100 (+ 0) on block mojo_top_0, actual ratio is 11.
 FlipFlop mystate/mytester/ctr/M_ctr_q_26 has been replicated 1 time(s)
+FlipFlop mystate/mytester/ctr/M_ctr_q_28 has been replicated 1 time(s)
 FlipFlop mystate/mytester/ctr/M_ctr_q_29 has been replicated 1 time(s)
 FlipFlop mystate/mytester/ctr/M_ctr_q_30 has been replicated 1 time(s)
 
@@ -351,8 +352,8 @@ Unit <mojo_top_0> processed.
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 39
- Flip-Flops                                            : 39
+# Registers                                            : 40
+ Flip-Flops                                            : 40
 
 =========================================================================
 
@@ -376,7 +377,7 @@ Clock Information:
 ------------------------------------------------------------+---------------------------------------+-------+
 Clock Signal                                                | Clock buffer(FF name)                 | Load  |
 ------------------------------------------------------------+---------------------------------------+-------+
-clk                                                         | BUFGP                                 | 39    |
+clk                                                         | BUFGP                                 | 40    |
 mystate/myalu/_n0133(mystate/myalu/out3:O)                  | NONE(*)(mystate/myalu/alu1_0)         | 8     |
 mystate/mytester/myalu/_n0133(mystate/mytester/myalu/out1:O)| NONE(*)(mystate/mytester/myalu/alu1_7)| 8     |
 ------------------------------------------------------------+---------------------------------------+-------+
@@ -395,7 +396,7 @@ Speed Grade: -2
 
    Minimum period: 4.560ns (Maximum Frequency: 219.298MHz)
    Minimum input arrival time before clock: 10.246ns
-   Maximum output required time after clock: 24.240ns
-   Maximum combinational path delay: 18.516ns
+   Maximum output required time after clock: 25.140ns
+   Maximum combinational path delay: 19.450ns
 
 =========================================================================

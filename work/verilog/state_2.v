@@ -110,6 +110,12 @@ module state_2 (
           v = 2'h3;
           n = 2'h3;
         end
+        if (alufn != 6'h21 & alufn != 6'h37 & alufn != 6'h35 & alufn != 6'h01 & alufn != 6'h16 & alufn != 6'h18 & alufn != 6'h23 & alufn != 6'h33 & alufn != 6'h20 & alufn != 6'h02 & alufn != 6'h1e & alufn != 6'h1a & alufn != 6'h00) begin
+          out = 8'h00;
+          z = 2'h2;
+          v = 2'h3;
+          n = 2'h3;
+        end
         if (dipsw) begin
           M_state_d = AUTO_state;
         end
