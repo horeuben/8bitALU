@@ -48,6 +48,7 @@ module mojo_top (
     led=mystate.out;         // make LED on FPGA below display result
     io_led[0] = mystate.clk_a;  // connect the DIP switches to the LEDs
     io_led[1] = mystate.clk_b;
+    io_led[2][5:0] = mystate.alufnout;
     
     seg.values[3] =0;
     seg.values[2] = mystate.z; // set z as 3rd from right led
@@ -57,6 +58,7 @@ module mojo_top (
     io_seg = ~seg.seg;      // connect segments to counter
     io_sel = ~seg.sel;      // select all digits to display on 7seg led
     io_sel[3] = ~4h0;       // off last led
+    
 
   }
 }

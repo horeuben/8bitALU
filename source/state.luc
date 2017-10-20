@@ -80,7 +80,6 @@ module state (
         //change to compare in tester module only 
         if (diperr & mytester.err==1){
          // alufnvar = mytester.alufn;
-                  
             out = 8b11111111;
             z = 2;
             v = 3;

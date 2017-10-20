@@ -40,6 +40,7 @@ module mojo_top_0 (
   wire [3-1:0] M_mystate_n;
   wire [8-1:0] M_mystate_clk_a;
   wire [8-1:0] M_mystate_clk_b;
+  wire [6-1:0] M_mystate_alufnout;
   reg [1-1:0] M_mystate_dipsw;
   reg [6-1:0] M_mystate_alufn;
   reg [1-1:0] M_mystate_diperr;
@@ -58,7 +59,8 @@ module mojo_top_0 (
     .v(M_mystate_v),
     .n(M_mystate_n),
     .clk_a(M_mystate_clk_a),
-    .clk_b(M_mystate_clk_b)
+    .clk_b(M_mystate_clk_b),
+    .alufnout(M_mystate_alufnout)
   );
   wire [7-1:0] M_seg_seg;
   wire [4-1:0] M_seg_sel;
@@ -86,6 +88,7 @@ module mojo_top_0 (
     led = M_mystate_out;
     io_led[0+7-:8] = M_mystate_clk_a;
     io_led[8+7-:8] = M_mystate_clk_b;
+    io_led[16+0+5-:6] = M_mystate_alufnout;
     M_seg_values[12+3-:4] = 1'h0;
     M_seg_values[8+3-:4] = M_mystate_z;
     M_seg_values[4+3-:4] = M_mystate_v;

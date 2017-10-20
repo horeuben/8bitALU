@@ -1,8 +1,8 @@
 INTSTYLE=pa
-INFILE=D:\Downloads\Term 4\50.002 - Com structs\mojo projects\8bitALU\work\planAhead\8bitALU\8bitALU.runs\impl_1\mojo_top_0_routed.ncd
-OUTFILE=D:\Downloads\Term 4\50.002 - Com structs\mojo projects\8bitALU\work\planAhead\8bitALU\8bitALU.runs\impl_1\mojo_top_0.bit
+INFILE=C:\Users\Jing Yun\Desktop\50.002 Computation Structure\1D-checkoff1\8bitALU-master (2)\8bit-ALU (jy_compare with hardcode)\work\planAhead\8bitALU\8bitALU.runs\impl_1\mojo_top_0_routed.ncd
+OUTFILE=C:\Users\Jing Yun\Desktop\50.002 Computation Structure\1D-checkoff1\8bitALU-master (2)\8bit-ALU (jy_compare with hardcode)\work\planAhead\8bitALU\8bitALU.runs\impl_1\mojo_top_0.bit
 FAMILY=Spartan6
 PART=xc6slx9-2tqg144
-WORKINGDIR=D:\Downloads\Term 4\50.002 - Com structs\mojo projects\8bitALU\work\planAhead\8bitALU\8bitALU.runs\impl_1
+WORKINGDIR=C:\Users\Jing Yun\Desktop\50.002 Computation Structure\1D-checkoff1\8bitALU-master (2)\8bit-ALU (jy_compare with hardcode)\work\planAhead\8bitALU\8bitALU.runs\impl_1
 LICENSE=WebPack
-USER_INFO=211409636_0_0_551
+USER_INFO=211420319_0_0_438

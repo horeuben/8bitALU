@@ -4,6 +4,7 @@
     <src>alu.luc</src>
     <src>seven_seg.luc</src>
     <src>state.luc</src>
+    <src>tester.luc</src>
     <src>multi_seven_seg.luc</src>
     <src top="true">mojo_top.luc</src>
     <ucf lib="true">io_shield.ucf</ucf>

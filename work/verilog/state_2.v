@@ -17,20 +17,38 @@ module state_2 (
     output reg [2:0] v,
     output reg [2:0] n,
     output reg [7:0] clk_a,
-    output reg [7:0] clk_b
+    output reg [7:0] clk_b,
+    output reg [5:0] alufnout
   );
   
   
   
-  localparam MANUAL_state = 1'd0;
-  localparam AUTO_state = 1'd1;
+  localparam MANUAL_state = 2'd0;
+  localparam AUTO_state = 2'd1;
+  localparam PAUSE_state = 2'd2;
   
-  reg M_state_d, M_state_q = MANUAL_state;
-  wire [16-1:0] M_autoab_value;
-  counter_4 autoab (
+  reg [1:0] M_state_d, M_state_q = MANUAL_state;
+  wire [8-1:0] M_mytester_a;
+  wire [8-1:0] M_mytester_b;
+  wire [6-1:0] M_mytester_alufn;
+  wire [8-1:0] M_mytester_out;
+  wire [1-1:0] M_mytester_z;
+  wire [1-1:0] M_mytester_v;
+  wire [1-1:0] M_mytester_n;
+  wire [1-1:0] M_mytester_err;
+  reg [1-1:0] M_mytester_forcederr;
+  tester_4 mytester (
     .clk(clk),
     .rst(rst),
-    .value(M_autoab_value)
+    .forcederr(M_mytester_forcederr),
+    .a(M_mytester_a),
+    .b(M_mytester_b),
+    .alufn(M_mytester_alufn),
+    .out(M_mytester_out),
+    .z(M_mytester_z),
+    .v(M_mytester_v),
+    .n(M_mytester_n),
+    .err(M_mytester_err)
   );
   
   wire [1-1:0] M_myalu_z;
@@ -50,6 +68,12 @@ module state_2 (
     .alu(M_myalu_alu)
   );
   
+  reg [7:0] displaya;
+  
+  reg [7:0] displayb;
+  
+  reg [5:0] alufnvar;
+  
   always @* begin
     M_state_d = M_state_q;
     
@@ -62,6 +86,11 @@ module state_2 (
     M_myalu_b = 1'h0;
     clk_a = 1'h0;
     clk_b = 1'h0;
+    displaya = 1'h0;
+    displayb = 1'h0;
+    alufnout = alufn;
+    alufnvar = 1'h0;
+    M_mytester_forcederr = diperr;
     
     case (M_state_q)
       MANUAL_state: begin
@@ -74,31 +103,39 @@ module state_2 (
         n = M_myalu_n;
         clk_a = a;
         clk_b = b;
+        alufnout = alufn;
+        if (diperr & M_myalu_alu != 8'hff) begin
+          out = 8'hff;
+          z = 2'h2;
+          v = 2'h3;
+          n = 2'h3;
+        end
         if (dipsw) begin
           M_state_d = AUTO_state;
         end
       end
       AUTO_state: begin
-        M_myalu_alufn = alufn;
-        M_myalu_b = M_autoab_value[8+7-:8];
-        M_myalu_a = M_autoab_value[0+7-:8];
-        clk_b = M_autoab_value[8+7-:8];
-        clk_a = M_autoab_value[0+7-:8];
-        out = M_myalu_alu;
-        z = M_myalu_z;
-        v = M_myalu_v;
-        n = M_myalu_n;
+        M_mytester_forcederr = diperr;
+        out = M_mytester_out;
+        z = M_mytester_z;
+        v = M_mytester_v;
+        n = M_mytester_n;
+        clk_a = M_mytester_a;
+        clk_b = M_mytester_b;
+        displaya = M_mytester_a;
+        displayb = M_mytester_b;
+        alufnout = M_mytester_alufn;
+        if (diperr & M_mytester_err == 1'h1) begin
+          out = 8'hff;
+          z = 2'h2;
+          v = 2'h3;
+          n = 2'h3;
+        end
         if (!dipsw) begin
           M_state_d = MANUAL_state;
         end
       end
     endcase
-    if (diperr & M_myalu_alu != 8'hff) begin
-      out = 8'hff;
-      z = 2'h2;
-      v = 2'h3;
-      n = 2'h3;
-    end
   end
   
   always @(posedge clk) begin

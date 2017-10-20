@@ -1,9 +1,31 @@
 global TestInst {
-  const ADD1   = 3b001; //opcode for addition     a+b
-  const ADD2   = 3b010;
-  const ADD3   = 3b011;
-  const ADD4   = 3b100;
-  const SUB1   = 3b101;
+  const ADD1   = 5b000; //state for addition     a+b
+  const ADD2   = 5b001;
+  const ADD3   = 5b010;
+  const ADD4   = 5b011;
+  const SUB1   = 5b100;
+  const SUB2   = 5b101;
+  const SUB3   = 5b110;
+  const SUB4   = 5b111;
+  const MUL1  = 5b1000;
+  const MUL2  = 5b1001;
+  const SHL = 5b1010;
+  const SHR = 5b1011;
+  const SRA1 = 5b1100;
+  const SRA2 = 5b1101;
+  const SRA3 = 5b01110;
+  const CMPEQ1 = 5b1111;
+  const CMPEQ2 = 5b10000;
+  const CMPLT1 = 5b10001;
+  const CMPLT2 = 5b10010;
+  const CMPLT3 = 5b10011;
+  const CMPLE1 = 5b10100;
+  const CMPLE2 = 5b10101;
+  const CMPLE3 = 5b10110;
+  const AND = 5b10111;
+  const OR = 5b11000;
+  const XOR = 5b11001;
+  const LDR = 5b11010;
 }
 module tester (
     input clk,  // clock
@@ -21,7 +43,7 @@ module tester (
  
   .clk(clk) {
     .rst(rst) {
-      counter ctr (#DIV(26), #SIZE(3),#TOP(3b101)); 
+      counter ctr (#DIV(26), #SIZE(5),#TOP(5b11010)); 
     }
   }
   
@@ -40,8 +62,8 @@ module tester (
     myalu.a = 0;
     myalu.b = 0;
     err=0; //error is assumed to be 0 unless changed later
-    intermediate=8b11111111; //'wrong' or 'correct' output displayed on mojo
-          
+    intermediate=8b11111111;
+              
     //when you reach the last state, go back to the first state
       case(ctr.value){
     //test cases 
@@ -55,11 +77,12 @@ module tester (
           alufn = Inst.ADD;
           myalu.alufn = Inst.ADD;   
         // if there is no forcederror make intermediate the result of alu 
-          if (forcederr!=1){
+          if (!forcederr){
           intermediate=myalu.alu;
           }
         //compare with our manually calculated output with the intermediate result 
-         if (intermediate != 8b01000000){
+        //compare with the manually calculated result of z,v,n
+          if (intermediate != 8b01000000 | myalu.z!=0 | myalu.v!=0 | myalu.n!=0){
             err =1;
             }
         
@@ -75,7 +98,7 @@ module tester (
           if (forcederr!=1){
           intermediate=myalu.alu;
           }
-          if (intermediate != 8b10000011){
+          if (intermediate != 8b10000011 | myalu.z!=0 | myalu.v!= 1 | myalu.n!=1 ){
             err =1;
             }
          
@@ -92,7 +115,7 @@ module tester (
           if (forcederr!=1){
           intermediate=myalu.alu;
           }
-          if (intermediate != 8b00000000){
+          if (intermediate != 8b00000000 | myalu.z!=0 | myalu.v!=1 | myalu.n!=0){
             err =1;
             }
           
@@ -107,7 +130,7 @@ module tester (
         if (forcederr!=1){
           intermediate=myalu.alu;
           }
-          if (intermediate != 8b00000100){
+        if (intermediate != 8b00000100 | myalu.z!=0 | myalu.v!=0 | myalu.n!=0){
             err =1;
             }
         
@@ -121,13 +144,339 @@ module tester (
         if (forcederr!=1){
           intermediate=myalu.alu;
           }
-          if (intermediate != 8b11111111){
+          if (intermediate != 8b11111111 | myalu.z!=0 | myalu.v!=0 | myalu.n!=1){
             err =1;
             }
+        
+        TestInst.SUB2:
+        myalu.a= 8b00000101;
+        myalu.b=8b00000011;
+        a= 8b00000101;
+        b=8b00000011;
+      myalu.alufn = Inst.SUB;
+        alufn = Inst.SUB;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+          if (intermediate != 8b00000010 | myalu.z!=0 | myalu.v!=0 | myalu.n!=0){
+            err =1;
+            }
+        
+        TestInst.SUB3:
+        myalu.a= 8b10000101;
+        myalu.b=8b10000101;
+        a= 8b10000101;
+        b=8b10000101;
+      myalu.alufn = Inst.SUB;
+        alufn = Inst.SUB;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000000 | myalu.z!=1 | myalu.v!=0 | myalu.n!=0){
+            err =1;
+            }
+        
+        TestInst.SUB4:
+        myalu.a= 8b10000000;
+        myalu.b=8b01111111;
+        a= 8b10000000;
+        b=8b01111111;
+      myalu.alufn = Inst.SUB;
+        alufn = Inst.SUB;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000001 | myalu.z!=1 | myalu.v!=1 | myalu.n!=0){
+            err =1;
+            }
+        
+        TestInst.MUL1:
+        myalu.a= 8b00000011;
+        myalu.b=8b00000011;
+        a= 8b00000011;
+        b=8b00000011;
+      myalu.alufn = Inst.MUL;
+        alufn = Inst.MUL;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00001001){
+            err =1;
+            }
+        
+        
+        TestInst.MUL2:
+        myalu.a= 8b10001001;
+        myalu.b=8b00010101;
+        a= 8b10001001;
+        b=8b00010101;
+      myalu.alufn = Inst.MUL;
+        alufn = Inst.MUL;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00111101){
+            err =1;
+            }
+        
+        TestInst.SHL:
+        myalu.a= 8b10001001;
+        myalu.b=8b00000011;
+        a= 8b10001001;
+        b=8b00000011;
+      myalu.alufn = Inst.SHL;
+        alufn = Inst.SHL;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b01001000){
+            err =1;
+            }
+        
+        TestInst.SHR:
+        myalu.a= 8b10100100;
+        myalu.b=8b00000100;
+        a= 8b10100100;
+        b=8b00000100;
+      myalu.alufn = Inst.SHR;
+        alufn = Inst.SHR;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00001010){
+            err =1;
+            }
+        
+        TestInst.SRA1:
+        myalu.a= 8b10100100;
+        myalu.b=8b00000010;
+        a= 8b10100100;
+        b=8b00000010;
+      myalu.alufn = Inst.SRA;
+        alufn = Inst.SRA;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b11101001){
+            err =1;
+            }
+        
+        TestInst.SRA2:
+        myalu.a= 8b00110010;
+        myalu.b=8b00000101;
+        a= 8b00110010;
+        b=8b00000101;
+        myalu.alufn = Inst.SRA;
+        alufn = Inst.SRA;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000001){
+            err =1;
+            }
+        
+        TestInst.SRA3:
+        myalu.a= 8b11000000;
+        myalu.b=8b00000110;
+        a= 8b11000000;
+        b=8b00000110;
+        myalu.alufn = Inst.SRA;
+        alufn = Inst.SRA;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b11111111){
+            err =1;
+            }
+        
+         TestInst.CMPEQ1:
+        myalu.a= 8b10010000;
+        myalu.b=8b10010000;
+        a= 8b10010000;
+        b=8b10010000;
+      myalu.alufn = Inst.CMPEQ;
+        alufn = Inst.CMPEQ;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000001){
+            err =1;
+            }
+        
+        TestInst.CMPEQ2:
+        myalu.a= 8b10010000;
+        myalu.b=8b10010001;
+        a= 8b10010000;
+        b=8b10010001;
+      myalu.alufn = Inst.CMPEQ;
+        alufn = Inst.CMPEQ;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000000){
+            err =1;
+            }
+        
+        TestInst.CMPEQ2:
+        myalu.a= 8b10010000;
+        myalu.b=8b10010001;
+        a= 8b10010000;
+        b=8b10010001;
+      myalu.alufn = Inst.CMPEQ;
+        alufn = Inst.CMPEQ;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000000){
+            err =1;
+            }
+        
+        TestInst.CMPLT1:
+        myalu.a= 8b10010000;
+        myalu.b=8b10010000;
+        a= 8b10010000;
+        b=8b10010000;
+      myalu.alufn = Inst.CMPLT;
+        alufn = Inst.CMPLT;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000000){
+            err =1;
+            }
+        
+        TestInst.CMPLT2:
+        myalu.a= 8b10010000;
+        myalu.b=8b10010001;
+        a= 8b10010000;
+        b=8b10010001;
+      myalu.alufn = Inst.CMPLT;
+        alufn = Inst.CMPLT;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000001){
+            err =1;
+            }
+        
+        TestInst.CMPLT3:
+        myalu.a= 8b10010001;
+        myalu.b=8b10010000;
+        a= 8b10010001;
+        b=8b10010000;
+      myalu.alufn = Inst.CMPLT;
+        alufn = Inst.CMPLT;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000000){
+            err =1;
+            }
+        
+        TestInst.CMPLE1:
+        myalu.a= 8b10010000;
+        myalu.b=8b10010000;
+        a= 8b10010000;
+        b=8b10010000;
+      myalu.alufn = Inst.CMPLE;
+        alufn = Inst.CMPLE;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000001){
+            err =1;
+            }
+        
+         TestInst.CMPLE2:
+        myalu.a= 8b10010000;
+        myalu.b=8b10010001;
+        a= 8b10010000;
+        b=8b10010001;
+      myalu.alufn = Inst.CMPLE;
+        alufn = Inst.CMPLE;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000001){
+            err =1;
+            }
+        
+        
+        
+        TestInst.CMPLE3:
+        myalu.a= 8b10010001;
+        myalu.b=8b10010000;
+        a= 8b10010001;
+        b=8b10010000;
+      myalu.alufn = Inst.CMPLE;
+        alufn = Inst.CMPLE;
+        if (forcederr!=1){
+          intermediate=myalu.alu;
+          }
+        if (intermediate != 8b00000000){
+            err =1;
+            }
+        
+        TestInst.AND:
+          myalu.a=8b10010001;
+          myalu.b=8b01010011;
+          a=8b10010001;
+          b=8b01010011;
+          myalu.alufn = Inst.AND;
+          alufn=Inst.AND;
+          if (forcederr!=1){
+            intermediate=myalu.alu;
+          }
+          if (intermediate != 8b00010001){
+            err =1;
+          }
+        
+        TestInst.OR:
+          myalu.a=8b10010001;
+          myalu.b=8b01010011;
+          a=8b10010001;
+          b=8b01010011;
+          myalu.alufn = Inst.OR;
+          alufn=Inst.OR;
+          if (forcederr!=1){
+            intermediate=myalu.alu;
+          }
+          if (intermediate != 8b11010011){
+            err =1;
+          }
+        
+        TestInst.XOR:
+          myalu.a=8b10010001;
+          myalu.b=8b01010011;
+          a=8b10010001;
+          b=8b01010011;
+          myalu.alufn = Inst.XOR;
+          alufn=Inst.XOR;
+          if (forcederr!=1){
+            intermediate=myalu.alu;
+          }
+          if (intermediate != 8b11000010){
+            err =1;
+          }
+        
+        TestInst.LDR:
+          myalu.a=8b10010001;
+          myalu.b=8b01010011;
+          a=8b10010001;
+          b=8b01010011;
+          myalu.alufn = Inst.LDR;
+          alufn=Inst.LDR;
+          if (forcederr!=1){
+            intermediate=myalu.alu;
+          }
+          if (intermediate != 8b10010001){
+            err =1;
+          }
+ 
     }
-    z= myalu.z;
-    v=myalu.v;
-    n=myalu.n;
+    z = myalu.z;
+    v =myalu.v;
+    n =myalu.n;
     out = intermediate;
     
     
